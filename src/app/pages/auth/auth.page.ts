@@ -32,6 +32,15 @@ export class AuthPage implements OnInit {
         this.firebase.singIn(this.form.value as User).then(res =>{
         console.log(res);
       }).catch(error =>{ 
+
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color:'primary',
+          position:'middle',
+          icon: 'alert-circle'
+          
+        });
         console.log(error);
       }).finally(() => {
         loading.dismiss();
