@@ -25,12 +25,59 @@ export class AuthPage implements OnInit {
   }
 
   async submit(){
-    const loading=await this.utilsSvc.loading();
-    await loading.present();
+  
+    if(this.form.valid ) {
+
+      const loading=await this.utilsSvc.loading();
+      await loading.present();
+
+        this.firebase.singIn(this.form.value as User).then(res =>{
+
+        this.getUserInfo(res.user.uid);
+
+      }).catch(error =>{ 
+
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color:'primary',
+          position:'middle',
+          icon: 'alert-circle'
+          
+        });
+        console.log(error);
+      }).finally(() => {
+        loading.dismiss();
+      })
+    }
+  }
+
+  async getUserInfo(uid:string){
 
     if(this.form.valid ) {
-        this.firebase.singIn(this.form.value as User).then(res =>{
-        console.log(res);
+      const loading=await this.utilsSvc.loading();
+      await loading.present();
+
+      let path = `users/${uid}`;
+
+      this.firebase.getDocument(path).then( (user: User) =>{
+        
+      this.utilsSvc.saveInLocalStorage('user',user);
+
+      //enrutamos a la pagina home
+      this.utilsSvc.routerLink('/main/home')
+      //limpiamos los campos del formulario
+      this.form.reset();
+
+      this.utilsSvc.presentToast({
+        message: `Te damos la bienvenida ${user.name}`,
+        duration: 1500,
+        color:'primary',
+        position:'middle',
+        icon: 'person-circle-outline'
+        
+      });
+
       }).catch(error =>{ 
 
         this.utilsSvc.presentToast({

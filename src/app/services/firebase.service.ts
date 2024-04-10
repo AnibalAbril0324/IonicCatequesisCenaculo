@@ -42,5 +42,10 @@ export class FirebaseService {
     setDocument(path:string,data:any){  
       return setDoc (doc(getFirestore(), path), data);
     }
+
+    //============== obtener un documento =================
+  async getDocument(path:string){
+    return (await getDoc(doc(getFirestore(), path))).data();
+  }
 }
 
