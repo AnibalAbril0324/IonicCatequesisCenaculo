@@ -6,6 +6,7 @@
 
             <app-logo></app-logo>
 
+            <!--=================== EMAIL ===================== --> 
             <app-custom-input autocomplete="email" icon="mail-outline" 
                         [control]="form.controls.email" type="email" label="Correo"></app-custom-input>
 
@@ -14,6 +15,7 @@
                 <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo valido</div>
             </div>
 
+            <!--=================== PASSWORD ===================== --> 
             <app-custom-input [control]="form.controls.password" icon="lock-closed-outline" 
                         type="password" label="Password"></app-custom-input>
                         

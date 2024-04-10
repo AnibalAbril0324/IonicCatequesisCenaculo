@@ -14,13 +14,22 @@ export class FirebaseService {
   constructor() { }
 
   // ================autenticacion=================================
-  getAuth(){
-    return getAuth();
-  }
 
   // ===========Acceder==========================
 
   singIn(user :User){
     return signInWithEmailAndPassword(getAuth(),user.email, user.password);
   }
+
+   // ===========crear usuario==========================
+  singUp(user :User){
+    return createUserWithEmailAndPassword(getAuth(),user.email, user.password);
+  }
+
+  // ===========Update==========================
+  updateUser(displayName:string){
+    return updateProfile(getAuth().currentUser,{displayName})
+  }
+
 }
+
