@@ -33,10 +33,10 @@ export class HomePage implements OnInit {
 
    //sireve para entrar en la funcion cada vez que el usuario entra en la pagina
   ionViewWillEnter() {
-    this.getProductos();
+    this.getStudents();
   }
    //======obtener productos===============
-  getProductos(){
+  getStudents(){
     let path= `users/${this.user().uid}/students`
     //this.loading=true;
 
@@ -57,13 +57,16 @@ export class HomePage implements OnInit {
   }
   //==========agregar un producto==========
   // al colocar "?" este parametro nos es requerido
-  addUpdateStudent(){
+  async addUpdateStudent(student?:Student){
     //[para poder recargar la pagina automaticamnte]
-      this.utilsSvc.abrirModal({
+    let success = await this.utilsSvc.abrirModal({
       component: AddUpdateStudentComponent,
       cssClass : 'add-update-modal',
+      componentProps:{student}
     })
-
+    if (success) this.getStudents();
   }
+
+
 
 }

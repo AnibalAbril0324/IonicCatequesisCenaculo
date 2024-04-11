@@ -70,10 +70,14 @@ export class FirebaseService {
     
    //============== Setear un documento =================
     //guardamos los datos del usuario
-    setDocument(path:string,data:any){  
-      return setDoc (doc(getFirestore(), path), data);
-    }
-
+  setDocument(path:string,data:any){  
+    return setDoc (doc(getFirestore(), path), data);
+  }
+  
+      //actualizar los datos del usuario
+  updateDocument(path:string,data:any){  
+    return updateDoc(doc(getFirestore(), path), data);
+  }
     //============== obtener un documento =================
   async getDocument(path:string){
     return (await getDoc(doc(getFirestore(), path))).data();
@@ -89,6 +93,11 @@ export class FirebaseService {
     return uploadString(ref(getStorage(),path),data_url,'data_url').then(() => {
       return getDownloadURL(ref(getStorage(),path))
     })
+  }
+
+  //=====obtener ruta de la img con su url===========
+  async getFilePath(url:string){
+    return ref(getStorage(),url).fullPath
   }
 }
 

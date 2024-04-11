@@ -18,18 +18,21 @@
           </div>
 
           <ion-chip color="primary" mode="ios" outline="true">
-            <ion-label>Nivel: {{s.name}}</ion-label>
+            <ion-label>Nombre: {{s.name}}</ion-label>
           </ion-chip>
 
         </ion-label>
       </ion-item>
 
+      <!--opciones-->
       <ion-item-options>
 
-        <ion-item-option>
+        <!--boton editar-->
+        <ion-item-option (click)="addUpdateStudent(s)">
           <ion-icon slot="start" name="create-outline"></ion-icon>
         </ion-item-option>
-  
+
+        <!--botoon eliminar-->
         <ion-item-option color="danger">
           <ion-icon class="option-btn" slot="start" name="trash-outline"></ion-icon>
         </ion-item-option>
