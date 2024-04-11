@@ -12,10 +12,10 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class AddUpdateStudentComponent  implements OnInit {
 
   form = new FormGroup({
-    uid: new FormControl(''),
+    id: new FormControl(''),
     image: new FormControl('',[Validators.required]),
     name: new FormControl('',[Validators.required,Validators.minLength(4)]),
-    edad: new FormControl('',[Validators.required,Validators.minLength(4)]),
+    edad: new FormControl('',[Validators.required,Validators.min(2)]),
     nivel: new FormControl('',[Validators.required,Validators.minLength(4)]),
   });
 
@@ -23,7 +23,12 @@ export class AddUpdateStudentComponent  implements OnInit {
 
   firebaseService =inject(FirebaseService);
   utilsSvc=inject(UtilsService)
+  user={} as User;
+
+
   ngOnInit() {
+    this.user= this.utilsSvc.getFromLocalStorage('user');
+    //if(this.product) this.form.setValue(this.product);
   }
 
   //=============tomar/seleccionar una imagen========= 
@@ -36,21 +41,33 @@ export class AddUpdateStudentComponent  implements OnInit {
   async submit(){
     if(this.form.valid){
       
+      let path= `users/${this.user.uid}/students`
+
       const loading=await this.utilsSvc.loading();
       await loading.present();
       
+       //subir la imagen y obtener la url
+      let dataUrl = this.form.value.image;
+      let imagePath= `${this.user.uid}/${Date.now()}`;
+      let imageUrl = await this.firebaseService.uploadImage(imagePath,dataUrl); 
+      this.form.controls.image.setValue(imageUrl);
+
+        //eliminamos el id porque estamos agregando un producto
+      delete this.form.value.id;
+
       //imprime en consola las credenciales ingresadas
       //enviamos el formulario al servicio para crear usuarios nuevos
-      this.firebaseService.singUp(this.form.value as User).then( async res => {
+      this.firebaseService.addDocument(path, this.form.value).then( async res => {
         
-        await this.firebaseService.updateUser(this.form.value.name);
+        this.utilsSvc.dismisModal({success: true}); //cerramos el modal cuando se crea exitosamente
 
-        //obtenemos el uid y lo agregamos al formulario
-        let uid= res.user.uid;
-        //this.form.controls.uid.setValue(uid); 
-
-        //imprime la respuesta a las credenciales ingresadas desde firebase
-        console.log(res);
+        this.utilsSvc.presentToast({
+          message: 'Alumno Registrado Exitosamente',
+          duration: 1500,
+          color:'success',
+          position:'middle',
+          icon: 'checkmark-circle-outline'
+        });
 
       }).catch(error => {
         console.log(error);

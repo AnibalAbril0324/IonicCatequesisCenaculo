@@ -7,6 +7,7 @@ import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, setDoc, doc, getDoc, addDoc, collection,collectionData,query, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
+import {getStorage, uploadString, ref, getDownloadURL, deleteObject } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class FirebaseService {
   auth = inject(AngularFireAuth);
   firestore = inject(AngularFirestore);
   utilsSvc =inject(UtilsService);
+  storage = inject(AngularFirestore);
   
   constructor() { }
 
@@ -67,6 +69,18 @@ export class FirebaseService {
     //============== obtener un documento =================
   async getDocument(path:string){
     return (await getDoc(doc(getFirestore(), path))).data();
+  }
+
+  //============== agregar un documento =================
+  addDocument(path:string,data:any){
+    return addDoc (collection(getFirestore(), path), data);
+  }
+
+  //============almacenamiento============
+  async uploadImage(path:string, data_url:string){
+    return uploadString(ref(getStorage(),path),data_url,'data_url').then(() => {
+      return getDownloadURL(ref(getStorage(),path))
+    })
   }
 }
 
