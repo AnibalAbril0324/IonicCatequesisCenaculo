@@ -1,0 +1,53 @@
+<app-header [isModal]="true" title="Agregar Alumno"></app-header>
+
+<ion-content>
+    <form [formGroup]="form" class="ion-no-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+
+        <!--============si hay imagen================== --> 
+        <ion-avatar *ngIf="form.value.image">
+            <img [src]="form.value.image" />
+        </ion-avatar>
+
+        <!--============no hay imagen================== --> 
+        <ion-icon class="image-icon" *ngIf="!form.value.image" name="image-outline" ></ion-icon>
+
+        <br>
+
+        <!--=================== tomar/seleccionar ===================== --> 
+        <ion-button (click)="takeImage()" mode="ios" size="small" shape="round">
+            Tomar/Seleccionar
+        </ion-button>
+
+        <!--=================== NAME ===================== --> 
+        <app-custom-input autocomplete="name"
+                    [control]="form.controls.name" type="text" label="Name"></app-custom-input>
+
+        <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+            <div *ngIf="form.controls.name.errors?.['required']">El nombre es requerido</div>
+            <div *ngIf="form.controls.name.errors?.['minlenght']">El nombre debe contener minimo 4 caracteres</div>
+        </div>
+
+
+        <!--=================== Edad ===================== --> 
+        <app-custom-input [control]="form.controls.edad" type="number" label="edad"></app-custom-input>
+
+        <div class="validators" *ngIf="form.controls.edad.errors && form.controls.edad.touched">
+        <div *ngIf="form.controls.edad.errors?.['required']">La edad es requerida</div>
+        <div *ngIf="form.controls.edad.errors?.['min']">La edad minima debe ser 0</div>
+        </div>
+
+        <!--=================== Nivel ===================== --> 
+        <app-custom-input [control]="form.controls.nivel" type="number" label="nivel"></app-custom-input>
+
+        <div class="validators" *ngIf="form.controls.nivel.errors && form.controls.nivel.touched">
+        <div *ngIf="form.controls.nivel.errors?.['required']">El nivel es requerido</div>
+        <div *ngIf="form.controls.nivel.errors?.['min']">La nivel minima debe ser 0</div>
+        </div>
+
+
+        <ion-button mode="ios" type="submit" class="ion-margin" [disabled]="form.invalid">
+            Agregar Alumno
+            <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+        </ion-button>
+    </form>
+</ion-content>
