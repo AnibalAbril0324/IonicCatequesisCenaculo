@@ -59,7 +59,15 @@ export class FirebaseService {
     // ====================================================
       // ===========Base de datos==========================
       // ====================================================
-      
+    
+    //========obtener dod de la base ======================
+  //el ? se utiliza para requerir o no la coleccion
+  getCollectionData(path:string, collectionQuery?:any ){
+    const ref = collection(getFirestore(),path);
+    return collectionData(query(ref,collectionQuery),{idField:'id'});
+    //obtenemos los productos desde la coleccion
+  }
+    
    //============== Setear un documento =================
     //guardamos los datos del usuario
     setDocument(path:string,data:any){  
