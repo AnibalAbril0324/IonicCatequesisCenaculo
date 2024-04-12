@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
   
    //arreglo de produtos
   students: Student []=[];
+  loading:boolean =false;
 
   constructor() { }
 
@@ -38,19 +39,12 @@ export class HomePage implements OnInit {
    //======obtener productos===============
   getStudents(){
     let path= `users/${this.user().uid}/students`
-    //this.loading=true;
-
-    //let query = [
-     // orderBy('soldUnits','desc'),
-      //where ('soldUnits','>',30)
-    //]
-      
-    
+    this.loading=true;
     let sub=this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         console.log(res);
         this.students = res;
-        //this.loading=false;
+        this.loading=false;
         sub.unsubscribe();
       }
     })
