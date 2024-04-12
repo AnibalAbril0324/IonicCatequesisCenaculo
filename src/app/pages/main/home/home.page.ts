@@ -67,6 +67,60 @@ export class HomePage implements OnInit {
     if (success) this.getStudents();
   }
 
+  //====confirmar la eliminacion del prodcuto==========
+  async confirmDeleteProduct(student: Student) {
+    this.utilsSvc.presentAlert({
+      header: 'Eliminar Alumno!',
+      message: '¿Quieres eliminar este Alumno?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+        }, {
+          text: 'Si, Eliminar',
+          handler: () => {
+            this.deleteStudent(student);
+          }
+        }
+      ]
+    });
+  }
 
+    //=======eliminar=============
+  async deleteStudent(student: Student){
+
+    let path= `users/${this.user().uid}/students/${student.id}`
+      
+    const loading=await this.utilsSvc.loading();
+    await loading.present();
+      
+    let imagePath= await this.firebaseSvc.getFilePath(student.image);
+    await this.firebaseSvc.deleteFile(imagePath);
+
+    this.firebaseSvc.deleteDocument(path).then( async res => {
+      this.students = this.students.filter(p => p.id !== student.id); 
+  
+      this.utilsSvc.presentToast({
+        message: 'Alumno Eliminado Exitosamente',
+        duration: 1500,
+        color:'success',
+        position:'middle',
+        icon: 'checkmark-circle-outline'
+      });
+  
+      }).catch(error => {
+        console.log(error);
+        this.utilsSvc.presentToast({
+          message: 'ERROR NO SE ACTUALIZARON LOS DATOS',
+          duration: 2500,
+          color:'primary',
+          position:'middle',
+          icon: 'alert-circle'
+        });
+  
+      }).finally( () => {
+        loading.dismiss();
+      })
+    }
 
 }

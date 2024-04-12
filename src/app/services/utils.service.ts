@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertController, AlertOptions, LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
@@ -11,11 +11,11 @@ export class UtilsService {
 
   loadingCtrl=inject(LoadingController);
   toastCtrl = inject(ToastController); //sirve para capturar el error al ingresar las credenciales
-  router = inject(Router)
-  modalCtrl = inject(ModalController)
+  modalCtrl = inject(ModalController);
+  router = inject(Router);
+  alertCtrl = inject(AlertController);
+  
   constructor() { }
-
-
 
 async takePicture(promptLabelHeader: string) {
   return await Camera.getPhoto({
@@ -29,6 +29,12 @@ async takePicture(promptLabelHeader: string) {
 
   });
 };
+  //=== alerta al eliminar===========
+async presentAlert(opts?:AlertOptions) {
+  const alert = await this.alertCtrl.create(opts);
+
+  await alert.present();
+}
 
   //======loading===========
   loading(){

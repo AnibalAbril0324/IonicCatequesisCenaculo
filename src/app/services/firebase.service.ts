@@ -78,6 +78,12 @@ export class FirebaseService {
   updateDocument(path:string,data:any){  
     return updateDoc(doc(getFirestore(), path), data);
   }
+
+   //eliminar un documento
+  deleteDocument(path:string){  
+    return deleteDoc(doc(getFirestore(), path));
+  }
+
     //============== obtener un documento =================
   async getDocument(path:string){
     return (await getDoc(doc(getFirestore(), path))).data();
@@ -98,6 +104,11 @@ export class FirebaseService {
   //=====obtener ruta de la img con su url===========
   async getFilePath(url:string){
     return ref(getStorage(),url).fullPath
+  }
+
+     //===eliminar archivo===
+  deleteFile(path:string){
+    return deleteObject(ref(getStorage(),path));
   }
 }
 
