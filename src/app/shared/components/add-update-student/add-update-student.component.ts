@@ -46,6 +46,13 @@ export class AddUpdateStudentComponent  implements OnInit {
     }
   }
 
+  //===convierte valores de string a numero========
+  setNumbersInputs(){
+    let {edad} = this.form.controls;
+
+    if(edad.value) edad.setValue(parseFloat(edad.value));
+  }
+
   //la palabra async representa la eventual finalizacion (exito o fracaso) de una operacion asincrona
   async createStudent(){
     

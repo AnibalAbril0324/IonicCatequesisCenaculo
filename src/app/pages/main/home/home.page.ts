@@ -5,6 +5,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateStudentComponent } from 'src/app/shared/components/add-update-student/add-update-student.component';
 
+
+import { orderBy, where } from 'firebase/firestore';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -32,6 +36,18 @@ export class HomePage implements OnInit {
     return this.utilsSvc.getFromLocalStorage('user');
   }
 
+  doRefresh(event) {
+    setTimeout(() => {
+      this.getStudents();
+      event.target.complete();
+    }, 1000);
+  }
+
+  //====obtener ganancias=========
+  getProfits(){
+    return this.students.reduce((index,student) => index + student.edad,0);
+  }
+
    //sireve para entrar en la funcion cada vez que el usuario entra en la pagina
   ionViewWillEnter() {
     this.getStudents();
@@ -40,6 +56,12 @@ export class HomePage implements OnInit {
   getStudents(){
     let path= `users/${this.user().uid}/students`
     this.loading=true;
+
+    let query = [
+      orderBy('edad','asc'),
+      where ('edad','>',30)
+    ]
+
     let sub=this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         console.log(res);

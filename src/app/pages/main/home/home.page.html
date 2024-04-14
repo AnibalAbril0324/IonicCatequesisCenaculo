@@ -2,6 +2,23 @@
 
 <ion-content>
 
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" *ngIf="!loading && students.length">
+    <div>
+      <h5>{{students.length}}</h5>
+      <p>Cantidad de Alumnos</p>
+    </div>
+
+    <div>
+      <h5>{{getProfits()}}</h5>
+      <p>Suma Edades</p>
+    </div>
+
+  </ion-card>
+
   <!--==Students==-->
   <ion-list class="!loading">
     <ion-item-sliding class="product-item" *ngFor="let s of students">
